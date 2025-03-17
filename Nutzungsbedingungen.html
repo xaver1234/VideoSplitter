@@ -23,7 +23,136 @@
         h1, h2 {
             color: #4CAF50;
         }
-        /* ... Rest deines bestehenden Styles ... */
+            /* Allgemeine Stile */
+    body {
+      font-family: Arial, sans-serif;
+      background: #1e1e1e;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    h1, h2, h3 {
+      color: #4CAF50;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    /* Navbar */
+    .navbar {
+      background: #252526;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar-left, .navbar-right {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown button {
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+    .dropdown button:hover {
+      background: #45a049;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background: #333;
+      min-width: 200px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+    .dropdown-content a {
+      color: #fff;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      transition: background 0.3s ease;
+    }
+    .dropdown-content a:hover {
+      background: #4CAF50;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    /* Pricelist-Button in der Navbar */
+    #pricelist-btn {
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+    #pricelist-btn:hover {
+      background: #45a049;
+    }
+    /* Preisliste: dauerhaft sichtbar, als Zeile (initial versteckt) */
+    #pricing-section {
+      background: #252526;
+      padding: 20px;
+      display: none;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin: 20px auto;
+      border-radius: 5px;
+    }
+    .price-card {
+      background: #333;
+      padding: 20px;
+      border-radius: 10px;
+      width: 220px;
+      text-align: center;
+      margin: 10px;
+      transition: transform 0.3s ease;
+    }
+    .price-card:hover {
+      transform: scale(1.05);
+    }
+    .price-card h4 {
+      margin: 5px 0;
+      color: #4CAF50;
+    }
+    .price-card p {
+      margin: 10px 0;
+    }
+    .price-card button {
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .price-card button:hover {
+      background: #45a049;
+    }
+    /* Dummy Bereiche: Konto, Subscription, Einstellungen */
+    .account-section, .subscription-section, .settings-section {
+      background: #333;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 20px;
+      text-align: center;
+    }
     </style>
 </head>
 <body>
