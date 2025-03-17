@@ -475,20 +475,70 @@
     updatePricingButtons();
     updateAccountInfo();
   </script>
-  <footer style="
+<!-- Füge dies VOR dem schließenden </body>-Tag ein -->
+<footer style="
     background: #252526;
-    padding: 20px;
+    padding: 30px 20px;
     text-align: center;
     margin-top: 50px;
     border-top: 2px solid #4CAF50;
-  ">
-    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-      <a href="impressum.html" style="color: #fff; text-decoration: none;">Impressum</a>
-      <a href="datenschutz.html" style="color: #fff; text-decoration: none;">Datenschutz</a>
+">
+    <div style="
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    ">
+        <a href="impressum.html" 
+           style="
+               color: #fff; 
+               text-decoration: none;
+               transition: color 0.3s ease;
+               padding: 8px 15px;
+               border-radius: 5px;
+               background: #333;
+           "
+           onmouseover="this.style.color='#4CAF50'" 
+           onmouseout="this.style.color='#fff'">
+            Impressum
+        </a>
+        
+        <a href="datenschutz.html" 
+           style="
+               color: #fff; 
+               text-decoration: none;
+               transition: color 0.3s ease;
+               padding: 8px 15px;
+               border-radius: 5px;
+               background: #333;
+           "
+           onmouseover="this.style.color='#4CAF50'" 
+           onmouseout="this.style.color='#fff'">
+            Datenschutz
+        </a>
+        
+        <a href="nutzungsbedingungen.html" 
+           style="
+               color: #fff; 
+               text-decoration: none;
+               transition: color 0.3s ease;
+               padding: 8px 15px;
+               border-radius: 5px;
+               background: #333;
+           "
+           onmouseover="this.style.color='#4CAF50'" 
+           onmouseout="this.style.color='#fff'">
+            Nutzungsbedingungen
+        </a>
     </div>
-    <p style="color: #888; margin-top: 15px;">
-      © 2024 Video Cutter - Alle Rechte vorbehalten
-    </p>
-  </footer>
+    
+    <div style="color: #888; font-size: 0.9em;">
+        <p>© 2024 Video Splitter Pro | Alle Rechte vorbehalten</p>
+        <p style="margin-top: 8px; font-size: 0.8em;">
+            Made with ❤️ by [Dein Name/Team]
+        </p>
+    </div>
+</footer>
 </body>
 </html>
