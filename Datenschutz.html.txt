@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Datenschutz</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
+        h1 { color: #4CAF50; }
+    </style>
+</head>
+<body>
+    <h1>Datenschutzerklärung</h1>
+    
+    <h2>1. Datenschutz auf einen Blick</h2>
+    <p>Diese Website erhebt keinerlei personenbezogene Daten. 
+       Es werden keine Cookies verwendet und keine Analytics-Tools eingesetzt.</p>
+
+    <h2>2. Hosting</h2>
+    <p>Diese Website wird gehostet auf GitHub Pages. 
+       Es gelten die Datenschutzbestimmungen von GitHub: 
+       <a href="https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement">GitHub Privacy Statement</a></p>
+
+    <a href="index.html" style="color: #4CAF50;">← Zurück zur Hauptseite</a>
+</body>
+</html>

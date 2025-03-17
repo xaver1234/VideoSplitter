@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Impressum</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
+        h1 { color: #4CAF50; }
+    </style>
+</head>
+<body>
+    <h1>Impressum</h1>
+    
+    <h2>Angaben gemäß § 5 TMG</h2>
+    <p>[Dein vollständiger Name]<br>
+    [Straße und Hausnummer]<br>
+    [Postleitzahl und Ort]</p>
+
+    <h2>Kontakt</h2>
+    <p>E-Mail: [Deine E-Mail-Adresse]</p>
+
+    <h2>Verantwortlich für den Inhalt</h2>
+    <p>[Dein vollständiger Name]</p>
+
+    <a href="index.html" style="color: #4CAF50;">← Zurück zur Hauptseite</a>
+</body>
+</html>
