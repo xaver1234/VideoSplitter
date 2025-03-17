@@ -2,10 +2,10 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Video Splitter & PDF Converter – Konvertiere deine Videos in verschiedene Formate, teile sie in Clips und nutze personalisierte Einstellungen.">
-  <meta name="keywords" content="Video Splitter, PDF Converter, Konvertierung, Clip, MP4, WebM, AVI, Pricelist, Abonnement, Konversion, Rangliste">
+  <meta name="description" content="Video Splitter – Teile Videos in Clips und nutze personalisierte Einstellungen.">
+  <meta name="keywords" content="Video Splitter, Clip, MP4, WebM, AVI, Pricelist, Abonnement, Konversion">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video Splitter & PDF Converter</title>
+  <title>Video Splitter Pro</title>
   <style>
     /* Allgemeine Stile */
     body {
@@ -23,6 +23,7 @@
       margin: 0 auto;
       padding: 20px;
     }
+
     /* Navbar */
     .navbar {
       background: #252526;
@@ -74,6 +75,7 @@
     .dropdown:hover .dropdown-content {
       display: block;
     }
+
     /* Pricelist-Button in der Navbar */
     #pricelist-btn {
       background: #4CAF50;
@@ -88,7 +90,8 @@
     #pricelist-btn:hover {
       background: #45a049;
     }
-    /* Preisliste: dauerhaft sichtbar, als Zeile (initial versteckt) */
+
+    /* Preisliste */
     #pricing-section {
       background: #252526;
       padding: 20px;
@@ -129,16 +132,9 @@
     .price-card button:hover {
       background: #45a049;
     }
-    /* Dummy Bereiche: Konto, Subscription, Einstellungen */
-    .account-section, .subscription-section, .settings-section {
-      background: #333;
-      padding: 15px;
-      border-radius: 5px;
-      margin-top: 20px;
-      text-align: center;
-    }
-    /* Video Splitter & PDF Converter */
-    input[type="file"], input[type="number"], select, input[type="text"], input[type="password"] {
+
+    /* Video Splitter Elemente */
+    input[type="file"], input[type="number"], select {
       padding: 10px;
       margin: 10px 0;
       background: #333;
@@ -158,6 +154,7 @@
       padding: 20px;
       border-radius: 10px;
     }
+
     /* Spinner */
     .spinner {
       border: 4px solid #f3f3f3;
@@ -173,11 +170,11 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    /* Versteckte Container */
+
     .hidden {
       display: none;
     }
-    /* Responsive Design */
+
     @media (max-width: 600px) {
       .container {
         padding: 10px;
@@ -201,10 +198,8 @@
         <button>Funktionen ▼</button>
         <div class="dropdown-content">
           <a href="#" data-target="video-splitter">Video Splitter</a>
-          <a href="#" data-target="pdf-converter">PDF Converter</a>
         </div>
       </div>
-      <!-- Pricelist-Button -->
       <button id="pricelist-btn" onclick="togglePricelist()">Pricelist</button>
     </div>
     <div class="navbar-right">
@@ -219,7 +214,7 @@
     </div>
   </div>
 
-  <!-- Preisliste (dauerhaft sichtbar, wird ein- bzw. ausgeblendet) -->
+  <!-- Preisliste -->
   <div id="pricing-section">
     <div class="price-card" data-plan="FREE">
       <h4>FREE</h4>
@@ -227,12 +222,14 @@
       <button onclick="selectPlan('FREE')">Gewählt</button>
     </div>
     <div class="price-card" data-plan="MIDDLE">
-      <h4>MIDDLE 5€ per Month</h4> <h4>MIDDLE 2,5€/Month per Year</h4>
+      <h4>MIDDLE 5€ per Month</h4>
+      <h4>MIDDLE 2,5€/Month per Year</h4>
       <p>20 Konvertierungen/Day</p>
       <button onclick="selectPlan('MIDDLE')">Jetzt kaufen</button>
     </div>
     <div class="price-card" data-plan="PRO">
-      <h4>PRO 10€ per Month</h4> <h4>PRO 5€/Month per Year</h4>
+      <h4>PRO 10€ per Month</h4>
+      <h4>PRO 5€/Month per Year</h4>
       <p>100 Konvertierungen/Day</p>
       <p>5 Videos in Line</p>
       <button onclick="selectPlan('PRO')">Jetzt kaufen</button>
@@ -265,18 +262,6 @@
     <div class="output">
       <h2>📂 Generierte Clips:</h2>
       <div id="clip-list"></div>
-    </div>
-  </div>
-
-  <!-- PDF Converter -->
-  <div class="container hidden" id="pdf-converter">
-    <h1>📄 PDF Converter</h1>
-    <p>Lade eine PDF-Datei hoch und konvertiere sie:</p>
-    <input type="file" id="pdf-upload" accept="application/pdf">
-    <div style="margin-top: 15px;">
-      <button>Zu JPG konvertieren</button>
-      <button>Zu PNG konvertieren</button>
-      <button>Zu MP4 konvertieren</button>
     </div>
   </div>
 
@@ -318,38 +303,30 @@
 
   <script>
     // Globale Variablen
-    let selectedPlan = "FREE"; // FREE ist standardmäßig gewählt
+    let selectedPlan = "FREE";
     let conversionCount = 0;
     window.userSettings = {};
 
-    // Funktion zum Umschalten der Preisliste (anzeigen/verbergen)
     function togglePricelist() {
       const pricingSection = document.getElementById('pricing-section');
       pricingSection.style.display = pricingSection.style.display === "flex" ? "none" : "flex";
     }
 
-    // Funktion zur Auswahl eines Plans
     function selectPlan(plan) {
       selectedPlan = plan;
       updatePricingButtons();
-      // Dummy-Kauf auslösen
       purchasePlan(plan);
     }
 
-    // Aktualisiert die Beschriftungen der Buttons in der Preisliste
     function updatePricingButtons() {
       document.querySelectorAll('.price-card').forEach(card => {
         const plan = card.getAttribute('data-plan');
         const btn = card.querySelector('button');
-        if(plan === selectedPlan) {
-          btn.innerText = "Gewählt";
-        } else {
-          btn.innerText = "Jetzt kaufen";
-        }
+        btn.innerText = plan === selectedPlan ? "Gewählt" : "Jetzt kaufen";
       });
     }
 
-    // Menüsteuerung: Container anzeigen/ausblenden
+    // Event Listener für Menülinks
     document.querySelectorAll('.dropdown-content a').forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
@@ -357,14 +334,11 @@
         document.querySelectorAll('.container').forEach(container => {
           container.classList.add('hidden');
         });
-        if(targetId) {
-          const target = document.getElementById(targetId);
-          if(target) target.classList.remove('hidden');
-        }
+        document.getElementById(targetId).classList.remove('hidden');
       });
     });
 
-    // Video Splitter Logik mit Spinner, Format- und Qualitätswahl
+    // Video Splitter Logik
     const videoUpload = document.getElementById('video-upload');
     const videoPreview = document.getElementById('video-preview');
     const intervalInput = document.getElementById('interval');
@@ -427,118 +401,66 @@
       }, 1000);
     });
 
-    // Einstellungen speichern: Kontoinformationen inkl. Nickname
     function saveSettings() {
-      const accountName = document.getElementById('account-name').value;
-      const password = document.getElementById('password').value; // ACHTUNG: In echter Anwendung niemals im Klartext speichern!
-      const nickname = document.getElementById('nickname').value;
-      
-      window.userSettings = { accountName, password, nickname };
+      window.userSettings = { 
+        accountName: document.getElementById('account-name').value,
+        password: document.getElementById('password').value,
+        nickname: document.getElementById('nickname').value
+      };
       alert("Einstellungen gespeichert!");
       updateAccountInfo();
     }
 
     function updateAccountInfo() {
       const accountInfo = document.getElementById('account-info');
-      let displayNickname = (window.userSettings && window.userSettings.nickname) ? window.userSettings.nickname : "nicht gesetzt";
-      accountInfo.innerText = "Abonnement: " + selectedPlan + " | Konvertierungen: " + conversionCount + " | Nickname: " + displayNickname;
+      let displayNickname = window.userSettings.nickname || "nicht gesetzt";
+      accountInfo.innerText = `Abonnement: ${selectedPlan} | Konvertierungen: ${conversionCount} | Nickname: ${displayNickname}`;
     }
 
-    // Dummy Kauf-Funktion für Abonnements: Erhöht den Konvertierungszähler
     function purchasePlan(plan) {
-      // Setze den ausgewählten Plan
       selectedPlan = plan;
       updatePricingButtons();
-      
-      // Erhöhe den Konvertierungszähler
       conversionCount++;
       updateAccountInfo();
-      
-      // Füge Dummy-Transaktion hinzu
+
       const transactionList = document.getElementById("transaction-list");
-      // Entferne Dummy-Eintrag, falls vorhanden
       if(transactionList.children.length === 1 && transactionList.children[0].innerText.includes("Keine Transaktionen")) {
         transactionList.innerHTML = "";
       }
       const li = document.createElement("li");
-      li.innerText = "Plan " + plan + " gekauft am " + new Date().toLocaleDateString();
+      li.innerText = `Plan ${plan} gekauft am ${new Date().toLocaleDateString()}`;
       transactionList.appendChild(li);
-      
-      // Öffne Mailto-Link (öffnet den E-Mail-Client) und leite dann zu PayPal weiter
+
       window.open("mailto:Saasdfasdf@hotmail.com");
       setTimeout(() => {
         window.location.href = "https://www.paypal.com";
       }, 2000);
     }
 
-    // Beim Laden Seite: Update Preisauswahl (FREE standardmäßig)
+    // Initialisierung
     updatePricingButtons();
     updateAccountInfo();
   </script>
-<!-- Füge dies VOR dem schließenden </body>-Tag ein -->
-<footer style="
-    background: #252526;
-    padding: 30px 20px;
-    text-align: center;
-    margin-top: 50px;
-    border-top: 2px solid #4CAF50;
-">
-    <div style="
-        display: flex;
-        justify-content: center;
-        gap: 25px;
-        flex-wrap: wrap;
-        margin-bottom: 20px;
-    ">
-        <a href="impressum.html" 
-           style="
-               color: #fff; 
-               text-decoration: none;
-               transition: color 0.3s ease;
-               padding: 8px 15px;
-               border-radius: 5px;
-               background: #333;
-           "
-           onmouseover="this.style.color='#4CAF50'" 
-           onmouseout="this.style.color='#fff'">
-            Impressum
-        </a>
-        
-        <a href="datenschutz.html" 
-           style="
-               color: #fff; 
-               text-decoration: none;
-               transition: color 0.3s ease;
-               padding: 8px 15px;
-               border-radius: 5px;
-               background: #333;
-           "
-           onmouseover="this.style.color='#4CAF50'" 
-           onmouseout="this.style.color='#fff'">
-            Datenschutz
-        </a>
-        
-        <a href="nutzungsbedingungen.html" 
-           style="
-               color: #fff; 
-               text-decoration: none;
-               transition: color 0.3s ease;
-               padding: 8px 15px;
-               border-radius: 5px;
-               background: #333;
-           "
-           onmouseover="this.style.color='#4CAF50'" 
-           onmouseout="this.style.color='#fff'">
-            Nutzungsbedingungen
-        </a>
+
+  <footer style="background: #252526; padding: 30px 20px; text-align: center; margin-top: 50px; border-top: 2px solid #4CAF50;">
+    <div style="display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-bottom: 20px;">
+      <a href="impressum.html" style="color: #fff; text-decoration: none; padding: 8px 15px; border-radius: 5px; background: #333;"
+         onmouseover="this.style.color='#4CAF50'" onmouseout="this.style.color='#fff'">
+        Impressum
+      </a>
+      <a href="datenschutz.html" style="color: #fff; text-decoration: none; padding: 8px 15px; border-radius: 5px; background: #333;"
+         onmouseover="this.style.color='#4CAF50'" onmouseout="this.style.color='#fff'">
+        Datenschutz
+      </a>
+      <a href="nutzungsbedingungen.html" style="color: #fff; text-decoration: none; padding: 8px 15px; border-radius: 5px; background: #333;"
+         onmouseover="this.style.color='#4CAF50'" onmouseout="this.style.color='#fff'">
+        Nutzungsbedingungen
+      </a>
     </div>
-    
     <div style="color: #888; font-size: 0.9em;">
-        <p>© 2024 Video Splitter Pro | Alle Rechte vorbehalten</p>
-        <p style="margin-top: 8px; font-size: 0.8em;">
-            Made with ❤️ by [Dein Name/Team]
-        </p>
+      <p>© 2024 Video Splitter Pro | Alle Rechte vorbehalten</p>
+      <p style="margin-top: 8px; font-size: 0.8em;">Made with ❤️ by [Dein Name/Team]</p>
     </div>
-</footer>
+  </footer>
 </body>
 </html>
