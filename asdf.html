@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Video Splitter & PDF Converter – Konvertiere deine Videos in verschiedene Formate, teile sie in Clips und nutze personalisierte Einstellungen.">
+  <meta name="keywords" content="Video Splitter, PDF Converter, Konvertierung, Clip, MP4, WebM, AVI, Pricelist, Abonnement, Konversion, Rangliste">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Splitter & PDF Converter</title>
+  <style>
+    /* Allgemeine Stile */
+    body {
+      font-family: Arial, sans-serif;
+      background: #1e1e1e;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    h1, h2, h3 {
+      color: #4CAF50;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    /* Navbar */
+    .navbar {
+      background: #252526;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar-left, .navbar-right {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown button {
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+    .dropdown button:hover {
+      background: #45a049;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background: #333;
+      min-width: 200px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+    .dropdown-content a {
+      color: #fff;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      transition: background 0.3s ease;
+    }
+    .dropdown-content a:hover {
+      background: #4CAF50;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    /* Pricelist-Button in der Navbar */
+    #pricelist-btn {
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+    #pricelist-btn:hover {
+      background: #45a049;
+    }
+    /* Preisliste: dauerhaft sichtbar, als Zeile (initial versteckt) */
+    #pricing-section {
+      background: #252526;
+      padding: 20px;
+      display: none;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin: 20px auto;
+      border-radius: 5px;
+    }
+    .price-card {
+      background: #333;
+      padding: 20px;
+      border-radius: 10px;
+      width: 220px;
+      text-align: center;
+      margin: 10px;
+      transition: transform 0.3s ease;
+    }
+    .price-card:hover {
+      transform: scale(1.05);
+    }
+    .price-card h4 {
+      margin: 5px 0;
+      color: #4CAF50;
+    }
+    .price-card p {
+      margin: 10px 0;
+    }
+    .price-card button {
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .price-card button:hover {
+      background: #45a049;
+    }
+    /* Dummy Bereiche: Konto, Subscription, Einstellungen */
+    .account-section, .subscription-section, .settings-section {
+      background: #333;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 20px;
+      text-align: center;
+    }
+    /* Video Splitter & PDF Converter */
+    input[type="file"], input[type="number"], select, input[type="text"], input[type="password"] {
+      padding: 10px;
+      margin: 10px 0;
+      background: #333;
+      color: #fff;
+      border: 1px solid #555;
+      border-radius: 5px;
+      width: 100%;
+    }
+    video {
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+    .output {
+      margin-top: 20px;
+      background: #252526;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    /* Spinner */
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #4CAF50;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      display: none;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* Versteckte Container */
+    .hidden {
+      display: none;
+    }
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px;
+      }
+      .navbar {
+        flex-direction: column;
+        gap: 10px;
+      }
+      #pricing-section {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Menüleiste -->
+  <div class="navbar">
+    <div class="navbar-left">
+      <div class="dropdown">
+        <button>Funktionen ▼</button>
+        <div class="dropdown-content">
+          <a href="#" data-target="video-splitter">Video Splitter</a>
+          <a href="#" data-target="pdf-converter">PDF Converter</a>
+        </div>
+      </div>
+      <!-- Pricelist-Button -->
+      <button id="pricelist-btn" onclick="togglePricelist()">Pricelist</button>
+    </div>
+    <div class="navbar-right">
+      <div class="dropdown">
+        <button>Konto ▼</button>
+        <div class="dropdown-content">
+          <a href="#" data-target="account">Mein Konto</a>
+          <a href="#" data-target="subscription">Subscription</a>
+          <a href="#" data-target="settings">Einstellungen</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preisliste (dauerhaft sichtbar, wird ein- bzw. ausgeblendet) -->
+  <div id="pricing-section">
+    <div class="price-card" data-plan="FREE">
+      <h4>FREE</h4>
+      <p>5 Konvertierungen/Day</p>
+      <button onclick="selectPlan('FREE')">Gewählt</button>
+    </div>
+    <div class="price-card" data-plan="MIDDLE">
+      <h4>MIDDLE 5€ per Month</h4> <h4>MIDDLE 2,5€/Month per Year</h4>
+      <p>20 Konvertierungen/Day</p>
+      <button onclick="selectPlan('MIDDLE')">Jetzt kaufen</button>
+    </div>
+    <div class="price-card" data-plan="PRO">
+      <h4>PRO 10€ per Month</h4> <h4>PRO 5€/Month per Year</h4>
+      <p>100 Konvertierungen/Day</p>
+      <p>5 Videos in Line</p>
+      <button onclick="selectPlan('PRO')">Jetzt kaufen</button>
+    </div>
+  </div>
+
+  <!-- Video Splitter -->
+  <div class="container" id="video-splitter">
+    <h1>🎥 Video Splitter</h1>
+    <p>Lade ein Video hoch und teile es in mehrere Clips auf.</p>
+    <input type="file" id="video-upload" accept="video/*">
+    <br>
+    <label for="interval">Clip-Länge (Sekunden):</label>
+    <input type="number" id="interval" value="10" min="1">
+    <label for="format">Ausgabeformat:</label>
+    <select id="format">
+      <option value="mp4">MP4</option>
+      <option value="webm">WebM</option>
+      <option value="avi">AVI</option>
+    </select>
+    <label for="quality">Qualität:</label>
+    <select id="quality">
+      <option value="original">Original</option>
+      <option value="720p">720p</option>
+      <option value="1080p">1080p</option>
+    </select>
+    <button id="split-btn">Video teilen</button>
+    <div class="spinner" id="spinner"></div>
+    <video id="video-preview" controls></video>
+    <div class="output">
+      <h2>📂 Generierte Clips:</h2>
+      <div id="clip-list"></div>
+    </div>
+  </div>
+
+  <!-- PDF Converter -->
+  <div class="container hidden" id="pdf-converter">
+    <h1>📄 PDF Converter</h1>
+    <p>Lade eine PDF-Datei hoch und konvertiere sie:</p>
+    <input type="file" id="pdf-upload" accept="application/pdf">
+    <div style="margin-top: 15px;">
+      <button>Zu JPG konvertieren</button>
+      <button>Zu PNG konvertieren</button>
+      <button>Zu MP4 konvertieren</button>
+    </div>
+  </div>
+
+  <!-- Konto-Bereich -->
+  <div class="container hidden" id="account">
+    <h1>Mein Konto</h1>
+    <div class="account-section">
+      <p id="account-info">Abonnement: Kein Abonnement | Konvertierungen: 0</p>
+      <h3>Letzte Transaktionen:</h3>
+      <ul id="transaction-list">
+        <li>Keine Transaktionen vorhanden.</li>
+      </ul>
+      <h3>Rangliste (Gesamte Konvertierungen):</h3>
+      <p id="conversion-count">0</p>
+    </div>
+  </div>
+
+  <!-- Subscription-Bereich -->
+  <div class="container hidden" id="subscription">
+    <h1>Subscription</h1>
+    <p>Hier können Sie Ihr Abonnement verwalten.</p>
+  </div>
+
+  <!-- Einstellungen-Bereich -->
+  <div class="container hidden" id="settings">
+    <h1>Einstellungen</h1>
+    <div class="settings-section">
+      <form id="settings-form">
+        <label for="account-name">Kontoname:</label>
+        <input type="text" id="account-name" placeholder="Dein Kontoname">
+        <label for="password">Passwort:</label>
+        <input type="password" id="password" placeholder="Passwort">
+        <label for="nickname">Nickname (wird im Ranking angezeigt):</label>
+        <input type="text" id="nickname" placeholder="Dein Nickname">
+        <button type="button" onclick="saveSettings()">Speichern</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Globale Variablen
+    let selectedPlan = "FREE"; // FREE ist standardmäßig gewählt
+    let conversionCount = 0;
+    window.userSettings = {};
+
+    // Funktion zum Umschalten der Preisliste (anzeigen/verbergen)
+    function togglePricelist() {
+      const pricingSection = document.getElementById('pricing-section');
+      pricingSection.style.display = pricingSection.style.display === "flex" ? "none" : "flex";
+    }
+
+    // Funktion zur Auswahl eines Plans
+    function selectPlan(plan) {
+      selectedPlan = plan;
+      updatePricingButtons();
+      // Dummy-Kauf auslösen
+      purchasePlan(plan);
+    }
+
+    // Aktualisiert die Beschriftungen der Buttons in der Preisliste
+    function updatePricingButtons() {
+      document.querySelectorAll('.price-card').forEach(card => {
+        const plan = card.getAttribute('data-plan');
+        const btn = card.querySelector('button');
+        if(plan === selectedPlan) {
+          btn.innerText = "Gewählt";
+        } else {
+          btn.innerText = "Jetzt kaufen";
+        }
+      });
+    }
+
+    // Menüsteuerung: Container anzeigen/ausblenden
+    document.querySelectorAll('.dropdown-content a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.dataset.target;
+        document.querySelectorAll('.container').forEach(container => {
+          container.classList.add('hidden');
+        });
+        if(targetId) {
+          const target = document.getElementById(targetId);
+          if(target) target.classList.remove('hidden');
+        }
+      });
+    });
+
+    // Video Splitter Logik mit Spinner, Format- und Qualitätswahl
+    const videoUpload = document.getElementById('video-upload');
+    const videoPreview = document.getElementById('video-preview');
+    const intervalInput = document.getElementById('interval');
+    const formatSelect = document.getElementById('format');
+    const qualitySelect = document.getElementById('quality');
+    const splitBtn = document.getElementById('split-btn');
+    const clipList = document.getElementById('clip-list');
+    const spinner = document.getElementById('spinner');
+
+    let videoFile = null;
+    let videoDuration = 0;
+
+    videoUpload.addEventListener('change', (e) => {
+      videoFile = e.target.files[0];
+      if(videoFile) {
+        videoPreview.src = URL.createObjectURL(videoFile);
+        videoPreview.addEventListener('loadedmetadata', () => {
+          videoDuration = videoPreview.duration;
+        });
+      }
+    });
+
+    splitBtn.addEventListener('click', () => {
+      if(!videoFile) {
+        alert("Bitte lade zuerst ein Video hoch!");
+        return;
+      }
+      const interval = parseInt(intervalInput.value);
+      if(interval <= 0 || interval > videoDuration) {
+        alert("Ungültige Clip-Länge!");
+        return;
+      }
+      
+      spinner.style.display = "block";
+      clipList.innerHTML = "";
+      
+      const selectedFormat = formatSelect.value;
+      const selectedQuality = qualitySelect.value;
+      
+      let startTime = 0;
+      let partNumber = 1;
+      
+      setTimeout(() => {
+        while(startTime < videoDuration) {
+          const endTime = Math.min(startTime + interval, videoDuration);
+          const clipUrl = URL.createObjectURL(videoFile);
+          
+          const clipLink = document.createElement('a');
+          clipLink.href = clipUrl;
+          clipLink.download = `Part_${partNumber}.${selectedFormat}`;
+          clipLink.textContent = `Part ${partNumber} (${startTime.toFixed(2)}s - ${endTime.toFixed(2)}s) [${selectedQuality}]`;
+          clipLink.style.display = "block";
+          clipLink.style.marginBottom = "10px";
+          
+          clipList.appendChild(clipLink);
+          startTime = endTime;
+          partNumber++;
+        }
+        spinner.style.display = "none";
+      }, 1000);
+    });
+
+    // Einstellungen speichern: Kontoinformationen inkl. Nickname
+    function saveSettings() {
+      const accountName = document.getElementById('account-name').value;
+      const password = document.getElementById('password').value; // ACHTUNG: In echter Anwendung niemals im Klartext speichern!
+      const nickname = document.getElementById('nickname').value;
+      
+      window.userSettings = { accountName, password, nickname };
+      alert("Einstellungen gespeichert!");
+      updateAccountInfo();
+    }
+
+    function updateAccountInfo() {
+      const accountInfo = document.getElementById('account-info');
+      let displayNickname = (window.userSettings && window.userSettings.nickname) ? window.userSettings.nickname : "nicht gesetzt";
+      accountInfo.innerText = "Abonnement: " + selectedPlan + " | Konvertierungen: " + conversionCount + " | Nickname: " + displayNickname;
+    }
+
+    // Dummy Kauf-Funktion für Abonnements: Erhöht den Konvertierungszähler
+    function purchasePlan(plan) {
+      // Setze den ausgewählten Plan
+      selectedPlan = plan;
+      updatePricingButtons();
+      
+      // Erhöhe den Konvertierungszähler
+      conversionCount++;
+      updateAccountInfo();
+      
+      // Füge Dummy-Transaktion hinzu
+      const transactionList = document.getElementById("transaction-list");
+      // Entferne Dummy-Eintrag, falls vorhanden
+      if(transactionList.children.length === 1 && transactionList.children[0].innerText.includes("Keine Transaktionen")) {
+        transactionList.innerHTML = "";
+      }
+      const li = document.createElement("li");
+      li.innerText = "Plan " + plan + " gekauft am " + new Date().toLocaleDateString();
+      transactionList.appendChild(li);
+      
+      // Öffne Mailto-Link (öffnet den E-Mail-Client) und leite dann zu PayPal weiter
+      window.open("mailto:Saasdfasdf@hotmail.com");
+      setTimeout(() => {
+        window.location.href = "https://www.paypal.com";
+      }, 2000);
+    }
+
+    // Beim Laden Seite: Update Preisauswahl (FREE standardmäßig)
+    updatePricingButtons();
+    updateAccountInfo();
+  </script>
+</body>
+</html>
