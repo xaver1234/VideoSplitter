@@ -2,10 +2,12 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Video Splitter – Teile Videos in Clips und nutze personalisierte Einstellungen.">
-  <meta name="keywords" content="Video Splitter, Clip, MP4, WebM, AVI, Pricelist, Abonnement, Konversion">
+  <meta name="description" content="Part Maker – Das ultimative Video-Tool zum Erstellen von Clips. Lerne, wie du deine Videos einfach und schnell in Teile zerlegen kannst.">
+  <meta name="keywords" content="Part Maker, Video, Clip Maker, Video Splitter, Videobearbeitung, Videoclips, Video Tools">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video Splitter Pro</title>
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="[Dein Name/Team]">
+  <title>Part Maker – Das ultimative Video-Tool</title>
   <style>
     /* Allgemeine Stile */
     body {
@@ -23,7 +25,7 @@
       margin: 0 auto;
       padding: 20px;
     }
-
+  
     /* Navbar */
     .navbar {
       background: #252526;
@@ -88,7 +90,7 @@
     #pricelist-btn:hover {
       background: #45a049;
     }
-
+  
     /* Preisliste */
     #pricing-section {
       background: #252526;
@@ -130,7 +132,7 @@
     .price-card button:hover {
       background: #45a049;
     }
-
+  
     /* Drag & Drop Bereich */
     .drag-drop-container {
       border: 2px dashed #4CAF50;
@@ -145,7 +147,7 @@
       background: #2a2a2a;
       border-color: #45a049;
     }
-
+  
     /* Video Splitter Elemente */
     input[type="file"], input[type="number"], select {
       padding: 10px;
@@ -167,7 +169,7 @@
       padding: 20px;
       border-radius: 10px;
     }
-
+  
     /* Spinner */
     .spinner {
       border: 4px solid #f3f3f3;
@@ -183,11 +185,11 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
+  
     .hidden {
       display: none;
     }
-
+  
     /* Popups */
     .popup-overlay {
       display: none;
@@ -221,7 +223,7 @@
       font-size: 24px;
       color: #4CAF50;
     }
-
+  
     @media (max-width: 600px) {
       .container {
         padding: 10px;
@@ -236,6 +238,21 @@
       }
     }
   </style>
+  
+  <!-- Structured Data für das Video (Part Maker) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": "Part Maker – Das ultimative Video-Tool",
+    "description": "Erfahre, wie du mit Part Maker Videos in Clips zerlegst und bearbeitest. Das Tool bietet dir einfache und schnelle Möglichkeiten zur Videobearbeitung.",
+    "thumbnailUrl": "https://example.com/thumbnail.jpg",
+    "uploadDate": "2024-03-20",
+    "duration": "PT2M30S",
+    "contentUrl": "https://example.com/videos/part-maker.mp4",
+    "embedUrl": "https://example.com/embed/part-maker"
+  }
+  </script>
 </head>
 <body>
   <!-- Menüleiste -->
@@ -260,7 +277,7 @@
       </div>
     </div>
   </div>
-
+  
   <!-- Preisliste -->
   <div id="pricing-section">
     <div class="price-card" data-plan="FREE">
@@ -282,7 +299,7 @@
       <button onclick="selectPlan('PRO')">Jetzt kaufen</button>
     </div>
   </div>
-
+  
   <!-- Video Splitter -->
   <div class="container" id="video-splitter">
     <h1>🎥 Video Splitter</h1>
@@ -316,7 +333,7 @@
       <div id="clip-list"></div>
     </div>
   </div>
-
+  
   <!-- Konto-Bereich -->
   <div class="container hidden" id="account">
     <h1>Mein Konto</h1>
@@ -330,13 +347,13 @@
       <p id="conversion-count">0</p>
     </div>
   </div>
-
+  
   <!-- Subscription-Bereich -->
   <div class="container hidden" id="subscription">
     <h1>Subscription</h1>
     <p>Hier können Sie Ihr Abonnement verwalten.</p>
   </div>
-
+  
   <!-- Einstellungen-Bereich -->
   <div class="container hidden" id="settings">
     <h1>Einstellungen</h1>
@@ -352,7 +369,7 @@
       </form>
     </div>
   </div>
-
+  
   <!-- Popups -->
   <div class="popup-overlay" id="popupOverlay"></div>
   
@@ -364,15 +381,15 @@
       <p>[Dein vollständiger Name]<br>
       [Straße und Hausnummer]<br>
       [Postleitzahl und Ort]</p>
-
+  
       <h2>Kontakt</h2>
       <p>E-Mail: [Deine E-Mail-Adresse]</p>
-
+  
       <h2>Verantwortlich für den Inhalt</h2>
       <p>[Dein vollständiger Name]</p>
     </div>
   </div>
-
+  
   <div class="popup" id="datenschutzPopup">
     <span class="close-btn" onclick="hidePopup()">&times;</span>
     <h2>Datenschutzerklärung</h2>
@@ -380,14 +397,14 @@
       <h2>1. Datenschutz auf einen Blick</h2>
       <p>Diese Website erhebt keinerlei personenbezogene Daten. 
        Es werden keine Cookies verwendet und keine Analytics-Tools eingesetzt.</p>
-
+  
       <h2>2. Hosting</h2>
       <p>Diese Website wird gehostet auf GitHub Pages. 
        Es gelten die Datenschutzbestimmungen von GitHub: 
        <a href="https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement" target="_blank">GitHub Privacy Statement</a></p>
     </div>
   </div>
-
+  
   <div class="popup" id="agbPopup">
     <span class="close-btn" onclick="hidePopup()">&times;</span>
     <h2>Allgemeine Geschäftsbedingungen</h2>
@@ -436,7 +453,7 @@
   </div>
   <!-- Schließendes </div> für das AGB-Popup -->
   </div>
-
+  
   <!-- Footer -->
   <footer style="background: #252526; padding: 30px 20px; text-align: center; margin-top: 50px; border-top: 2px solid #4CAF50;">
     <div style="display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-bottom: 20px;">
@@ -449,7 +466,7 @@
       <p style="margin-top: 8px; font-size: 0.8em;">Made with ❤️ by [Dein Name/Team]</p>
     </div>
   </footer>
-
+  
   <script>
     // Globale Variablen
     let selectedPlan = "FREE";
@@ -457,7 +474,7 @@
     window.userSettings = {};
     let videoFile = null;
     let videoDuration = 0;
-
+  
     // Elemente Video Splitter
     const dropZone = document.getElementById('dropZone');
     const videoUpload = document.getElementById('video-upload');
@@ -468,7 +485,7 @@
     const splitBtn = document.getElementById('split-btn');
     const clipList = document.getElementById('clip-list');
     const spinner = document.getElementById('spinner');
-
+  
     // Drag & Drop Event Listener
     dropZone.addEventListener('dragover', (e) => {
       e.preventDefault();
@@ -486,7 +503,7 @@
     videoUpload.addEventListener('change', function(e) {
       if(this.files.length > 0) handleVideoFile(this.files[0]);
     });
-
+  
     function handleVideoFile(file) {
       videoFile = file;
       if(videoFile) {
@@ -496,7 +513,7 @@
         });
       }
     }
-
+  
     // Video Splitter Funktionalität
     splitBtn.addEventListener('click', () => {
       if(!videoFile) {
@@ -537,7 +554,7 @@
         spinner.style.display = "none";
       }, 1000);
     });
-
+  
     // Funktionen für Preisliste und Konto
     function togglePricelist() {
       const pricingSection = document.getElementById('pricing-section');
@@ -560,7 +577,7 @@
       updatePricingButtons();
       conversionCount++;
       updateAccountInfo();
-
+  
       const transactionList = document.getElementById("transaction-list");
       if(transactionList.children.length === 1 && transactionList.children[0].innerText.includes("Keine Transaktionen")) {
         transactionList.innerHTML = "";
@@ -568,13 +585,13 @@
       const li = document.createElement("li");
       li.innerText = `Plan ${plan} gekauft am ${new Date().toLocaleDateString()}`;
       transactionList.appendChild(li);
-
+  
       window.open("mailto:Saasdfasdf@hotmail.com");
       setTimeout(() => {
         window.location.href = "https://www.paypal.com";
       }, 2000);
     }
-
+  
     // Einstellungen-Funktionen
     function saveSettings() {
       window.userSettings = { 
@@ -590,7 +607,7 @@
       let displayNickname = window.userSettings.nickname || "nicht gesetzt";
       accountInfo.innerText = `Abonnement: ${selectedPlan} | Konvertierungen: ${conversionCount} | Nickname: ${displayNickname}`;
     }
-
+  
     // Popup Funktionen
     function showPopup(type) {
       document.getElementById('popupOverlay').style.display = 'block';
@@ -603,7 +620,7 @@
       });
     }
     document.getElementById('popupOverlay').addEventListener('click', hidePopup);
-
+  
     // Umschalten zwischen Containern über die Menülinks
     document.querySelectorAll('.dropdown-content a').forEach(link => {
       link.addEventListener('click', (e) => {
@@ -615,7 +632,7 @@
         document.getElementById(targetId).classList.remove('hidden');
       });
     });
-
+  
     // Initialisierung
     updatePricingButtons();
     updateAccountInfo();
