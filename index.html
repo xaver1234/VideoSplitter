@@ -317,6 +317,157 @@
   </div>
 
   <script>
+    <script>
+  // FFmpeg Initialisierung
+  const { createFFmpeg, fetchFile } = FFmpeg;
+  const ffmpeg = createFFmpeg({ log: true });
+  let ffmpegLoaded = false;
+
+  // Globale Variablen
+  let selectedPlan = "FREE";
+  let conversionCount = 0;
+  window.userSettings = {};
+
+  // Funktion zum Umschalten der Preisliste
+  function togglePricelist() {
+    const pricingSection = document.getElementById('pricing-section');
+    pricingSection.style.display = pricingSection.style.display === "flex" ? "none" : "flex";
+  }
+
+  // Funktion zur Auswahl eines Plans
+  function selectPlan(plan) {
+    selectedPlan = plan;
+    updatePricingButtons();
+    purchasePlan(plan);
+  }
+
+  // Aktualisiert die Beschriftungen der Buttons
+  function updatePricingButtons() {
+    document.querySelectorAll('.price-card').forEach(card => {
+      const plan = card.getAttribute('data-plan');
+      const btn = card.querySelector('button');
+      btn.innerText = plan === selectedPlan ? "Gewählt" : "Jetzt kaufen";
+    });
+  }
+
+  // Menüsteuerung
+  document.querySelectorAll('.dropdown-content a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.dataset.target;
+      document.querySelectorAll('.container').forEach(container => {
+        container.classList.add('hidden');
+      });
+      document.getElementById(targetId)?.classList.remove('hidden');
+    });
+  });
+
+  // Video Splitter Variablen
+  const videoUpload = document.getElementById('video-upload');
+  const videoPreview = document.getElementById('video-preview');
+  const intervalInput = document.getElementById('interval');
+  const formatSelect = document.getElementById('format');
+  const qualitySelect = document.getElementById('quality');
+  const splitBtn = document.getElementById('split-btn');
+  const clipList = document.getElementById('clip-list');
+  const spinner = document.getElementById('spinner');
+  let videoFile = null;
+  let videoDuration = 0;
+
+  videoUpload.addEventListener('change', (e) => {
+    videoFile = e.target.files[0];
+    if(videoFile) {
+      videoPreview.src = URL.createObjectURL(videoFile);
+      videoPreview.addEventListener('loadedmetadata', () => {
+        videoDuration = videoPreview.duration;
+      });
+    }
+  });
+
+  // FFmpeg Processing Funktion
+  async function processClip(start, end, format, quality) {
+    if (!ffmpegLoaded) {
+      await ffmpeg.load();
+      ffmpegLoaded = true;
+    }
+
+    ffmpeg.FS('writeFile', 'input.mp4', await fetchFile(videoFile));
+    
+    const args = ['-ss', start.toString(), '-to', end.toString(), '-i', 'input.mp4'];
+    
+    if (quality !== 'original') {
+      args.push('-vf', `scale=-2:${quality === '720p' ? 720 : 1080}`);
+    }
+    
+    args.push('-c:v', 'libx264', '-preset', 'fast', `output.${format}`);
+
+    await ffmpeg.run(...args);
+
+    return ffmpeg.FS('readFile', `output.${format}`);
+  }
+
+  // Haupt-Split-Funktion
+  splitBtn.addEventListener('click', async () => {
+    if(!videoFile) {
+      alert("Bitte lade zuerst ein Video hoch!");
+      return;
+    }
+    const interval = parseInt(intervalInput.value);
+    if(interval <= 0 || interval > videoDuration) {
+      alert("Ungültige Clip-Länge!");
+      return;
+    }
+    
+    spinner.style.display = "block";
+    clipList.innerHTML = "";
+    
+    const selectedFormat = formatSelect.value;
+    const selectedQuality = qualitySelect.value;
+    let startTime = 0;
+    let partNumber = 1;
+
+    try {
+      while(startTime < videoDuration) {
+        const endTime = Math.min(startTime + interval, videoDuration);
+        let clipUrl, clipName;
+
+        if(selectedQuality === 'original') {
+          // Originalqualität ohne FFmpeg
+          clipUrl = URL.createObjectURL(videoFile);
+          clipName = `Part_${partNumber}.${selectedFormat}`;
+        } else {
+          // Verarbeitung mit FFmpeg
+          const processedData = await processClip(
+            startTime, 
+            endTime, 
+            selectedFormat, 
+            selectedQuality
+          );
+          
+          clipUrl = URL.createObjectURL(new Blob([processedData.buffer], {
+            type: `video/${selectedFormat}`
+          }));
+          clipName = `Part_${partNumber}_${selectedQuality}.${selectedFormat}`;
+        }
+
+        const clipLink = document.createElement('a');
+        clipLink.href = clipUrl;
+        clipLink.download = clipName;
+        clipLink.textContent = `Part ${partNumber} (${startTime.toFixed(2)}s - ${endTime.toFixed(2)}s) [${selectedQuality}]`;
+        clipLink.style.display = "block";
+        clipLink.style.marginBottom = "10px";
+        
+        clipList.appendChild(clipLink);
+        startTime = endTime;
+        partNumber++;
+      }
+    } catch (error) {
+      alert("Fehler bei der Verarbeitung: " + error.message);
+    } finally {
+      spinner.style.display = "none";
+    }
+  });
+    
     // Globale Variablen
     let selectedPlan = "FREE"; // FREE ist standardmäßig gewählt
     let conversionCount = 0;
