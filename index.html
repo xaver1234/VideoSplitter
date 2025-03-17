@@ -75,8 +75,6 @@
     .dropdown:hover .dropdown-content {
       display: block;
     }
-
-    /* Pricelist-Button in der Navbar */
     #pricelist-btn {
       background: #4CAF50;
       color: #fff;
@@ -133,6 +131,21 @@
       background: #45a049;
     }
 
+    /* Drag & Drop Bereich */
+    .drag-drop-container {
+      border: 2px dashed #4CAF50;
+      border-radius: 10px;
+      padding: 30px;
+      margin: 20px 0;
+      text-align: center;
+      background: #252526;
+      transition: all 0.3s ease;
+    }
+    .drag-drop-container.dragover {
+      background: #2a2a2a;
+      border-color: #45a049;
+    }
+
     /* Video Splitter Elemente */
     input[type="file"], input[type="number"], select {
       padding: 10px;
@@ -173,6 +186,40 @@
 
     .hidden {
       display: none;
+    }
+
+    /* Popups */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+    }
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #252526;
+      padding: 30px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 600px;
+      z-index: 1001;
+      border: 2px solid #4CAF50;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      cursor: pointer;
+      font-size: 24px;
+      color: #4CAF50;
     }
 
     @media (max-width: 600px) {
@@ -240,8 +287,13 @@
   <div class="container" id="video-splitter">
     <h1>🎥 Video Splitter</h1>
     <p>Lade ein Video hoch und teile es in mehrere Clips auf.</p>
-    <input type="file" id="video-upload" accept="video/*">
-    <br>
+    <!-- Drag & Drop Bereich -->
+    <div class="drag-drop-container" id="dropZone">
+      <p>Ziehe deine Video-Datei hierher oder</p>
+      <button onclick="document.getElementById('video-upload').click()">Datei auswählen</button>
+      <input type="file" id="video-upload" accept="video/*" hidden>
+    </div>
+    <!-- Restliche Video-Splitter-Elemente -->
     <label for="interval">Clip-Länge (Sekunden):</label>
     <input type="number" id="interval" value="10" min="1">
     <label for="format">Ausgabeformat:</label>
@@ -301,44 +353,111 @@
     </div>
   </div>
 
+  <!-- Popups -->
+  <div class="popup-overlay" id="popupOverlay"></div>
+  
+  <div class="popup" id="impressumPopup">
+    <span class="close-btn" onclick="hidePopup()">&times;</span>
+    <h2>Impressum</h2>
+    <div class="popup-content">
+    l<h2>Angaben gemäß § 5 TMG</h2>
+    <p>[Dein vollständiger Name]<br>
+    [Straße und Hausnummer]<br>
+    [Postleitzahl und Ort]</p>
+
+    <h2>Kontakt</h2>
+    <p>E-Mail: [Deine E-Mail-Adresse]</p>
+
+    <h2>Verantwortlich für den Inhalt</h2>
+    <p>[Dein vollständiger Name]</p>
+    </div>
+  </div>
+
+  <div class="popup" id="datenschutzPopup">
+    <span class="close-btn" onclick="hidePopup()">&times;</span>
+    <h2>Datenschutzerklärung</h2>
+    <div class="popup-content">
+    <h2>1. Datenschutz auf einen Blick</h2>
+    <p>Diese Website erhebt keinerlei personenbezogene Daten. 
+       Es werden keine Cookies verwendet und keine Analytics-Tools eingesetzt.</p>
+
+    <h2>2. Hosting</h2>
+    <p>Diese Website wird gehostet auf GitHub Pages. 
+       Es gelten die Datenschutzbestimmungen von GitHub: 
+       <a href="https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement">GitHub Privacy Statement</a></p>
+
+    </div>
+  </div>
+
+  <div class="popup" id="agbPopup">
+    <span class="close-btn" onclick="hidePopup()">&times;</span>
+    <h2>Allgemeine Geschäftsbedingungen</h2>
+    <div class="popup-content">
+        <h1>Nutzungsbedingungen</h1>
+  
+  <h2>1. Haftungsausschluss</h2>
+  <p>Der Betreiber übernimmt keinerlei Haftung für:</p>
+  <ul>
+    <li>Von Nutzern hochgeladene oder konvertierte Inhalte</li>
+    <li>Rechtmäßigkeit der verarbeiteten Dateien</li>
+    <li>Verluste oder Schäden durch Nutzung des Dienstes</li>
+    <li>Technische Störungen oder Datenverluste</li>
+  </ul>
+  
+  <h2>2. Urheberrecht</h2>
+  <p>Nutzer garantieren, dass sie:</p>
+  <ul>
+    <li>Alle notwendigen Rechte an hochgeladenen Inhalten besitzen</li>
+    <li>Keine urheberrechtlich geschützten Inhalte unrechtmäßig verarbeiten</li>
+    <li>Den Dienst nicht zur Umgehung von Kopierschutzmechanismen nutzen</li>
+  </ul>
+  
+  <h2>3. Benutzerverantwortung</h2>
+  <p>Sie sind ausschließlich verantwortlich für:</p>
+  <ul>
+    <li>Rechtmäßigkeit Ihrer hochgeladenen Inhalte</li>
+    <li>Einhaltung aller Urheber- und Persönlichkeitsrechte</li>
+    <li>Backups Ihrer Originaldateien</li>
+  </ul>
+  
+  <h2>4. Sanktionen bei Verstößen</h2>
+  <p>Bei Rechtsverletzungen behalten wir uns vor:</p>
+  <ul>
+    <li>Betroffene Inhalte unverzüglich zu löschen</li>
+    <li>Nutzerkonten zu sperren</li>
+    <li>Juristische Schritte einzuleiten</li>
+  </ul>
+  
+  <h2>5. Externe Links</h2>
+  <p>Für Inhalte verlinkter Websites Dritter übernehmen wir keine Haftung.</p>
+  
+  <h2>6. Änderungsvorbehalt</h2>
+  <p>Wir behalten uns Änderungen dieser Nutzungsbedingungen jederzeit vor.</p>
+  </div>
+
+  <!-- Footer -->
+  <footer style="background: #252526; padding: 30px 20px; text-align: center; margin-top: 50px; border-top: 2px solid #4CAF50;">
+    <div style="display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-bottom: 20px;">
+      <a href="#" class="footer-link" onclick="showPopup('impressum')">Impressum</a>
+      <a href="#" class="footer-link" onclick="showPopup('datenschutz')">Datenschutz</a>
+      <a href="#" class="footer-link" onclick="showPopup('agb')">AGB</a>
+    </div>
+    <div style="color: #888; font-size: 0.9em;">
+      <p>© 2024 Video Splitter Pro | Alle Rechte vorbehalten</p>
+      <p style="margin-top: 8px; font-size: 0.8em;">Made with ❤️ by [Dein Name/Team]</p>
+    </div>
+  </footer>
+
   <script>
     // Globale Variablen
     let selectedPlan = "FREE";
     let conversionCount = 0;
     window.userSettings = {};
+    let videoFile = null;
+    let videoDuration = 0;
 
-    function togglePricelist() {
-      const pricingSection = document.getElementById('pricing-section');
-      pricingSection.style.display = pricingSection.style.display === "flex" ? "none" : "flex";
-    }
-
-    function selectPlan(plan) {
-      selectedPlan = plan;
-      updatePricingButtons();
-      purchasePlan(plan);
-    }
-
-    function updatePricingButtons() {
-      document.querySelectorAll('.price-card').forEach(card => {
-        const plan = card.getAttribute('data-plan');
-        const btn = card.querySelector('button');
-        btn.innerText = plan === selectedPlan ? "Gewählt" : "Jetzt kaufen";
-      });
-    }
-
-    // Event Listener für Menülinks
-    document.querySelectorAll('.dropdown-content a').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.dataset.target;
-        document.querySelectorAll('.container').forEach(container => {
-          container.classList.add('hidden');
-        });
-        document.getElementById(targetId).classList.remove('hidden');
-      });
-    });
-
-    // Video Splitter Logik
+    // Elemente Video Splitter
+    const dropZone = document.getElementById('dropZone');
     const videoUpload = document.getElementById('video-upload');
     const videoPreview = document.getElementById('video-preview');
     const intervalInput = document.getElementById('interval');
@@ -348,19 +467,35 @@
     const clipList = document.getElementById('clip-list');
     const spinner = document.getElementById('spinner');
 
-    let videoFile = null;
-    let videoDuration = 0;
+    // Drag & Drop Event Listener
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      const files = e.dataTransfer.files;
+      if(files.length > 0) handleVideoFile(files[0]);
+    });
+    videoUpload.addEventListener('change', function(e) {
+      if(this.files.length > 0) handleVideoFile(this.files[0]);
+    });
 
-    videoUpload.addEventListener('change', (e) => {
-      videoFile = e.target.files[0];
+    function handleVideoFile(file) {
+      videoFile = file;
       if(videoFile) {
         videoPreview.src = URL.createObjectURL(videoFile);
         videoPreview.addEventListener('loadedmetadata', () => {
           videoDuration = videoPreview.duration;
         });
       }
-    });
+    }
 
+    // Video Splitter Funktionalität
     splitBtn.addEventListener('click', () => {
       if(!videoFile) {
         alert("Bitte lade zuerst ein Video hoch!");
@@ -401,22 +536,23 @@
       }, 1000);
     });
 
-    function saveSettings() {
-      window.userSettings = { 
-        accountName: document.getElementById('account-name').value,
-        password: document.getElementById('password').value,
-        nickname: document.getElementById('nickname').value
-      };
-      alert("Einstellungen gespeichert!");
-      updateAccountInfo();
+    // Funktionen für Preisliste und Konto
+    function togglePricelist() {
+      const pricingSection = document.getElementById('pricing-section');
+      pricingSection.style.display = pricingSection.style.display === "flex" ? "none" : "flex";
     }
-
-    function updateAccountInfo() {
-      const accountInfo = document.getElementById('account-info');
-      let displayNickname = window.userSettings.nickname || "nicht gesetzt";
-      accountInfo.innerText = `Abonnement: ${selectedPlan} | Konvertierungen: ${conversionCount} | Nickname: ${displayNickname}`;
+    function selectPlan(plan) {
+      selectedPlan = plan;
+      updatePricingButtons();
+      purchasePlan(plan);
     }
-
+    function updatePricingButtons() {
+      document.querySelectorAll('.price-card').forEach(card => {
+        const plan = card.getAttribute('data-plan');
+        const btn = card.querySelector('button');
+        btn.innerText = plan === selectedPlan ? "Gewählt" : "Jetzt kaufen";
+      });
+    }
     function purchasePlan(plan) {
       selectedPlan = plan;
       updatePricingButtons();
@@ -437,30 +573,50 @@
       }, 2000);
     }
 
+    // Einstellungen-Funktionen
+    function saveSettings() {
+      window.userSettings = { 
+        accountName: document.getElementById('account-name').value,
+        password: document.getElementById('password').value,
+        nickname: document.getElementById('nickname').value
+      };
+      alert("Einstellungen gespeichert!");
+      updateAccountInfo();
+    }
+    function updateAccountInfo() {
+      const accountInfo = document.getElementById('account-info');
+      let displayNickname = window.userSettings.nickname || "nicht gesetzt";
+      accountInfo.innerText = `Abonnement: ${selectedPlan} | Konvertierungen: ${conversionCount} | Nickname: ${displayNickname}`;
+    }
+
+    // Popup Funktionen
+    function showPopup(type) {
+      document.getElementById('popupOverlay').style.display = 'block';
+      document.getElementById(`${type}Popup`).style.display = 'block';
+    }
+    function hidePopup() {
+      document.getElementById('popupOverlay').style.display = 'none';
+      document.querySelectorAll('.popup').forEach(popup => {
+        popup.style.display = 'none';
+      });
+    }
+    document.getElementById('popupOverlay').addEventListener('click', hidePopup);
+
+    // Umschalten zwischen Containern über die Menülinks
+    document.querySelectorAll('.dropdown-content a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.dataset.target;
+        document.querySelectorAll('.container').forEach(container => {
+          container.classList.add('hidden');
+        });
+        document.getElementById(targetId).classList.remove('hidden');
+      });
+    });
+
     // Initialisierung
     updatePricingButtons();
     updateAccountInfo();
   </script>
-
-  <footer style="background: #252526; padding: 30px 20px; text-align: center; margin-top: 50px; border-top: 2px solid #4CAF50;">
-    <div style="display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-bottom: 20px;">
-      <a href="impressum.html" style="color: #fff; text-decoration: none; padding: 8px 15px; border-radius: 5px; background: #333;"
-         onmouseover="this.style.color='#4CAF50'" onmouseout="this.style.color='#fff'">
-        Impressum
-      </a>
-      <a href="datenschutz.html" style="color: #fff; text-decoration: none; padding: 8px 15px; border-radius: 5px; background: #333;"
-         onmouseover="this.style.color='#4CAF50'" onmouseout="this.style.color='#fff'">
-        Datenschutz
-      </a>
-      <a href="nutzungsbedingungen.html" style="color: #fff; text-decoration: none; padding: 8px 15px; border-radius: 5px; background: #333;"
-         onmouseover="this.style.color='#4CAF50'" onmouseout="this.style.color='#fff'">
-        Nutzungsbedingungen
-      </a>
-    </div>
-    <div style="color: #888; font-size: 0.9em;">
-      <p>© 2024 Video Splitter Pro | Alle Rechte vorbehalten</p>
-      <p style="margin-top: 8px; font-size: 0.8em;">Made with ❤️ by [Dein Name/Team]</p>
-    </div>
-  </footer>
 </body>
 </html>
