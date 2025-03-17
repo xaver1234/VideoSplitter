@@ -4,24 +4,86 @@
     <meta charset="UTF-8">
     <title>Impressum</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
-        h1 { color: #4CAF50; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #1e1e1e;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #252526;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #4CAF50;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #4CAF50;
+            font-size: 20px;
+            margin: 25px 0 15px;
+        }
+
+        p {
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #45a049;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            h2 {
+                font-size: 18px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Impressum</h1>
-    
-    <h2>Angaben gemäß § 5 TMG</h2>
-    <p>[Dein vollständiger Name]<br>
-    [Straße und Hausnummer]<br>
-    [Postleitzahl und Ort]</p>
+    <div class="container">
+        <h1>Impressum</h1>
+        
+        <h2>Angaben gemäß § 5 TMG</h2>
+        <p>[Dein vollständiger Name]<br>
+        [Straße und Hausnummer]<br>
+        [Postleitzahl und Ort]</p>
 
-    <h2>Kontakt</h2>
-    <p>E-Mail: [Deine E-Mail-Adresse]</p>
+        <h2>Kontakt</h2>
+        <p>E-Mail: [Deine E-Mail-Adresse]</p>
 
-    <h2>Verantwortlich für den Inhalt</h2>
-    <p>[Dein vollständiger Name]</p>
+        <h2>Verantwortlich für den Inhalt</h2>
+        <p>[Dein vollständiger Name]</p>
 
-    <a href="index.html" style="color: #4CAF50;">← Zurück zur Hauptseite</a>
+        <div style="margin-top: 30px;">
+            <a href="index.html" style="display: inline-block; padding: 10px 20px; background: #4CAF50; border-radius: 5px; color: white; transition: background 0.3s ease;">
+                ← Zurück zur Hauptseite
+            </a>
+        </div>
+    </div>
 </body>
 </html>
