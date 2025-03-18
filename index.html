@@ -233,7 +233,7 @@
     #cookie-banner {
       position: fixed;
       bottom: 0;
-      left: 0;
+      left: 50;
       right: 0;
       background-color: #f8f9fa;
       color: #000;
@@ -243,6 +243,7 @@
       justify-content: space-between;
       align-items: center;
       z-index: 2000;
+      
     }
     #cookie-banner p {
       margin: 0;
@@ -259,6 +260,7 @@
     #cookie-banner button:hover {
       background-color: #45a049;
     }
+    
   </style>
   
   <!-- Structured Data für das Video (Part Maker) -->
@@ -391,7 +393,11 @@
       </form>
     </div>
   </div>
-  
+    <div id="cookie-banner">
+    <p>Wir verwenden Cookies, um Ihre Erfahrung zu verbessern. Durch die Nutzung der Website stimmen Sie der Verwendung von Cookies zu.</p>
+    <button id="accept-cookies">Akzeptieren</button>
+    <button id="refuse-cookies">Ablehnen</button>
+  </div>
   <!-- Popups -->
   <div class="popup-overlay" id="popupOverlay"></div>
   
@@ -649,20 +655,15 @@
     updatePricingButtons();
     updateAccountInfo();
   
-    // --------------------
-    // Cookie-Banner Funktionen
-    // --------------------
+    // Funktion zum Setzen eines Cookies
     function setCookie(name, value, days) {
       const date = new Date();
-      // Optionale Anpassung: Ablaufdatum genau um Mitternacht setzen
-      // const now = new Date();
-      // const expires = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-      // date.setTime(expires.getTime());
       date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
       const expires = "expires=" + date.toUTCString();
       document.cookie = name + "=" + encodeURIComponent(value) + ";" + expires + ";path=/";
     }
   
+    // Funktion zum Abrufen eines Cookies
     function getCookie(name) {
       const nameEQ = name + "=";
       const ca = document.cookie.split(';');
@@ -673,21 +674,27 @@
       return null;
     }
   
+    // Überprüfen, ob der Benutzer bereits eine Cookie-Präferenz gesetzt hat
     function checkCookieConsent() {
-      const consent = getCookie("cookieConsent");
-      if (!consent) {
+      if (!getCookie("cookieConsent")) {
         document.getElementById("cookie-banner").style.display = "flex";
       }
     }
   
+    // Event-Listener für den "Akzeptieren"-Button
     document.getElementById("accept-cookies").addEventListener("click", function() {
       setCookie("cookieConsent", "true", 1);
       document.getElementById("cookie-banner").style.display = "none";
     });
   
-    window.addEventListener("load", function() {
-      checkCookieConsent();
+    // Event-Listener für den "Ablehnen"-Button
+    document.getElementById("refuse-cookies").addEventListener("click", function() {
+      setCookie("cookieConsent", "false", 1);
+      document.getElementById("cookie-banner").style.display = "none";
     });
+  
+    // Beim Laden der Seite prüfen, ob ein Cookie gesetzt wurde
+    window.addEventListener("load", checkCookieConsent);
   </script>
 </body>
 </html>
